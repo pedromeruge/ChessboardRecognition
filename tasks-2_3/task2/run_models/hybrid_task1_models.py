@@ -21,9 +21,10 @@ from IO.json_handler import read_single_image
 
 class HybridTask1ModelHandler(BaseModelHandler):
     def __init__(self, model_path):
+        self.model_path = model_path
+        self.inner_handler = self.get_inner_handler()
         super().__init__(model_path)
         self.img_counter = 31
-        self.inner_handler = self.get_inner_handler()
 
         # load horse used in task1
         horse_path = "task_1_code/our_images/cavalinhoPequeno.jpg"
@@ -31,17 +32,7 @@ class HybridTask1ModelHandler(BaseModelHandler):
 
     # load the appropriate resnet50 model based on model_path
     def load_model(self):
-        if "regression" in self.model_path:
-            model = models.resnet50()
-            model.fc = nn.Linear(model.fc.in_features, 1)
-        elif "classification" in self.model_path:
-            model = models.resnet50()
-            model.fc = nn.Linear(model.fc.in_features, 33)  # 33 classes for piece counts
-        else:
-            raise ValueError(f"Unsupported model type in path: {self.model_path}")
-        print(f"Loading model from {self.model_path} on device {self.device}")
-        model.load_state_dict(torch.load(self.model_path, map_location=self.device)['model'])
-        return model
+        return None # No model to load here, handled by inner handler
 
     def get_inner_handler(self):
         if "regression" in self.model_path:
@@ -66,9 +57,9 @@ class HybridTask1ModelHandler(BaseModelHandler):
             warped_img = pipeline_iter(image=img, separate_horse_results=self.horse_data)
 
             # Debug output warped image
-            output_path = os.path.join("debug_outputs", f"warped_{self.img_counter}.jpg")
-            cv2.imwrite(output_path, warped_img)
-            print(f"Saved warped image to {output_path}")
+            # output_path = os.path.join("debug_outputs", f"warped_{self.img_counter}.jpg")
+            # cv2.imwrite(output_path, warped_img)
+            # print(f"Saved warped image to {output_path}")
 
             self.img_counter +=1
 

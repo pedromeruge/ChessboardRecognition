@@ -40,6 +40,7 @@ class HybridTask3ModelHandler(BaseModelHandler):
     def load_corner_model(self):
         model = ResNetHeatmap().to(self.device)
         if os.path.exists(self.corner_model_path):
+            print(f"Loading model from {self.corner_model_path} on device {self.device}")
             model.load_state_dict(torch.load(self.corner_model_path, map_location=self.device))
         else:
             raise FileNotFoundError(f"Corner model not found at {self.corner_model_path}")
@@ -48,17 +49,7 @@ class HybridTask3ModelHandler(BaseModelHandler):
 
     # load the appropriate resnet50 model based on model_path
     def load_model(self):
-        if "regression" in self.model_path:
-            model = models.resnet50()
-            model.fc = nn.Linear(model.fc.in_features, 1)
-        elif "classification" in self.model_path:
-            model = models.resnet50()
-            model.fc = nn.Linear(model.fc.in_features, 33)  # 33 classes for piece counts
-        else:
-            raise ValueError(f"Unsupported model type in path: {self.model_path}")
-        print(f"Loading model from {self.model_path} on device {self.device}")
-        model.load_state_dict(torch.load(self.model_path, map_location=self.device)['model'])
-        return model
+        return None # No model to load here, handled by inner handler
 
     def get_inner_handler(self):
         if "regression" in self.model_path:

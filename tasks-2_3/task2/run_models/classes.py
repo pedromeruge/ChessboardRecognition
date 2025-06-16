@@ -25,8 +25,9 @@ class BaseModelHandler(ABC):
         self.model_path = model_path
         self.device = torch.accelerator.current_accelerator().type if torch.accelerator.is_available() else "cpu"
         self.model = self.load_model()
-        self.model = self.model.to(self.device)
-        self.model.eval()
+        if (self.model != None):
+            self.model = self.model.to(self.device)
+            self.model.eval()
 
 
     @abstractmethod
