@@ -172,6 +172,10 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# project specific
+models/
 images/
+altered_images/
 runs/
 yolo_chess_dataset/
