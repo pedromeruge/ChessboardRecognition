@@ -4,7 +4,9 @@ from classes import *
 import sys
 from vanilla_regression_models import RegressionModelHandler
 from vanilla_classification_models import ClassificationModelHandler
-from hybrid_models import HybridModelHandler
+from hybrid_task3_models import HybridTask3ModelHandler
+from yolo_model import YoloCountingModelHandler
+from hybrid_task1_models import HybridTask1ModelHandler
 
 BATCH_SIZE = 16
 DEFAULT_MODEL = "resnet50_normal_regression"
@@ -19,7 +21,7 @@ available_models = {
     # hybrid
     "resnet50_hybrid_task1_warping_classification": "/Volumes/KINGSTON/Projects/vcom_proj2/models/altered_classification_resnet50_unbalanced.pth",
     "resnet50_hybrid_task1_warping_regression": "/Volumes/KINGSTON/Projects/vcom_proj2/models/altered_regression_resnet50_unbalanced.pth",
-    "resnet50_hybrid_task2_warping_classification": "/Volumes/KINGSTON/Projects/vcom_proj2/models/corners_altered_classification_resnet50_unbalanced.pth",
+    "resnet50_hybrid_task3_warping_classification": "/Volumes/KINGSTON/Projects/vcom_proj2/models/corners_altered_classification_resnet50_unbalanced.pth",
     "resnet50_hybrid_task3_warping_regression": "/Volumes/KINGSTON/Projects/vcom_proj2/models/corners_altered_regression_resnet50_unbalanced.pth",
 
     #yolo
@@ -49,8 +51,12 @@ def run_task2_model(input_path="input.json", model_name="resnet50_normal_regress
         json.dump(predictions, f, indent=4)
 
 def get_model_handler(model_key):
-    if "warping" in model_key:
-        return HybridModelHandler(available_models[model_key], corner_model_path='modelo.pth')
+    if "yolo_counting" in model_key:
+        return YoloCountingModelHandler(available_models[model_key])
+    elif "hybrid_task3" in model_key:
+        return HybridTask3ModelHandler(available_models[model_key], corner_model_path='modelo.pth')
+    elif "hybrid_task1" in model_key:
+        return HybridTask1ModelHandler(available_models[model_key])
     elif "regression" in model_key:
         return RegressionModelHandler(available_models[model_key])
     elif "classification" in model_key:
