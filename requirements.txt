@@ -1,0 +1,9 @@
+opencv-python
+numpy
+matplotlib
+PyQt5
+scipy
+tqdm
+scikit-image
+ultralytics==8.3.146
+torch
